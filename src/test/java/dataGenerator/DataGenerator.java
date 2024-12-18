@@ -3,6 +3,8 @@ package dataGenerator;
 import com.github.javafaker.Faker;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 
@@ -11,26 +13,36 @@ public class DataGenerator {
 
     }
 
+    // генерыция даты
+    public static String generateDate(int shift) {
+        return LocalDate.now().plusDays(shift).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    // генерация емаил адреса
     public static String generateEmail(String locale) {
         Faker faker = new Faker(new Locale(locale));
         return faker.internet().emailAddress();
     }
 
+    // генерация имени
     public static String generateFirstName(String locale) {
         Faker faker = new Faker(new Locale(locale));
         return faker.name().firstName();
     }
 
+    // генерация фамилии
     public static String generateLastName(String locale) {
         Faker faker = new Faker(new Locale(locale));
         return faker.name().lastName();
     }
 
+    // генерация даты рождения
     public static String generateBirthday(String locale) {
         Faker faker = new Faker(new Locale(locale));
         return faker.date().birthday().toString(); // Возвращает дату в формате строки
     }
 
+    // генерация названия клуба
     public static String generateClubName(String locale) {
         Faker faker = new Faker(new Locale(locale));
         String club = "";
@@ -60,6 +72,7 @@ public class DataGenerator {
         return club;
     }
 
+    // генерация 1 пароля
     public static String generatePassword() {
         String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{};:'\",.<>?/";
 
@@ -73,7 +86,12 @@ public class DataGenerator {
         }
         return password.toString();
     }
-
+    // генерация (копия первого пароля) password1 ,,,
 }
+
+
+
+
+
 
 

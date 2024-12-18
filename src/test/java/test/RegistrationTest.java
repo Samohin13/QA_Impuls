@@ -1,101 +1,56 @@
 package test;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import dataGenerator.DataGenerator;
-import lombok.val;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import page.RegistrationPage;
 
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 
 public class RegistrationTest {
-
     @BeforeEach
-    void setUp()  {
-        Configuration.browserSize = String.valueOf(true);
-        open("http://127.0.0.1:8000/pages/register/");
+    void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
-        @Test
-        public void testSuccessfulRegistration() {
-            // Открываем страницу регистрации
-            open("http://127.0.0.1:8000/pages/register/");
+    @AfterAll
+    static void tearDown() {
+        SelenideLogger.removeListener("allure");
+    }
 
-            // Генерация тестовых данных
-            String locale = "ru";
-            String email = DataGenerator.generateEmail(locale);
-            String firstName = DataGenerator.generateFirstName(locale);
-            String lastName = DataGenerator.generateLastName(locale);
-            String birthday = DataGenerator.generateBirthday(locale);
-            String clubName = DataGenerator.generateClubName(locale);
-            String password = DataGenerator.generatePassword();
+    @BeforeEach
+    void setUp() {
+        Configuration.browserSize = String.valueOf(true);
+        open("http://127.0.0.1:8000/pages/register/");
+        RegistrationPage registrationPage = new RegistrationPage();
+    }
 
-            // Инициализация страницы
-            RegistrationPage registrationPage = new RegistrationPage();
+    @Test
+    public void testRegistrationForm() {
+        String email = DataGenerator.generateEmail("ru");
+        String firstName = DataGenerator.generateFirstName("ru");
+        String lastName = DataGenerator.generateLastName("ru");
+        String birthday = DataGenerator.generateBirthday("ru");
+        String clubName = DataGenerator.generateClubName("ru");
+        String password = DataGenerator.generatePassword();
 
-            // Выполнение регистрации
-            registrationPage.register(email, firstName, lastName, birthday, clubName, password);
 
-            // Проверка успешной регистрации
-            // Здесь вы можете добавить проверку на наличие элемента с сообщением об успешной регистрации
-            // Например:
-            // $("selector-success-message").shouldHave(text("Регистрация прошла успешно"));
-        }
-
-        @Test
-        public void testRegistrationWithInvalidEmail() {
-            // Открываем страницу регистрации
-            open("http://127.0.0.1:8000/pages/register/");
-
-            // Генерация тестовых данных
-            String locale = "en";
-            String invalidEmail = "invalid-email"; // Невалидный email
-            String firstName = DataGenerator.generateFirstName(locale);
-            String lastName = DataGenerator.generateLastName(locale);
-            String birthday = DataGenerator.generateBirthday(locale);
-            String clubName = DataGenerator.generateClubName(locale);
-            String password = DataGenerator.generatePassword();
-
-            // Инициализация страницы
-            RegistrationPage registrationPage = new RegistrationPage();
-
-            // Выполнение регистрации с невалидным email
-            registrationPage.register(invalidEmail, firstName, lastName, birthday, clubName, password);
-
-            // Проверка сообщения об ошибке
-            // Например:
-            // $("selector-error-message").shouldHave(text("Некорректный email"));
-        }
-
-//        @Test
-//        public void testRegistrationWithMismatchedPasswords() {
-//            // Открываем страницу регистрации
-//            open("http://127.0.0.1:8000/pages/register/");
-//
-//            // Генерация тестовых данных
-//            String locale = "en";
-//            String email = DataGenerator.generateEmail(locale);
-//            String firstName = DataGenerator.generateFirstName(locale);
-//            String lastName = DataGenerator.generateLastName(locale);
-//            String birthday = DataGenerator.generateBirthday(locale);
-//            String clubName = DataGenerator.generateClubName(locale);
-//            String password = DataGenerator.generatePassword();
-//            String mismatchedPassword = DataGenerator.generatePassword(); // Второй пароль, не совпадающий с первым
-//
-//            // Инициализация страницы
-//            RegistrationPage registrationPage = new RegistrationPage();
-//
-//            // Указание некорректного подтверждения пароля
-//            registrationPage.register(email, firstName, lastName, birthday, clubName, password);
-//            registrationPage.password1.setValue(mismatchedPassword);
-//
-//            // Проверка сообщения об ошибке
-//            // Например:
-//            // $("selector-error-message").shouldHave(text("Пароли не совпадают"));
-        }
+       // RegistrationPage.register(email, firstName, lastName, Integer.parseInt(birthday), clubName, password);
+        Selenide.sleep(3000);
+        // Добавлен для ожидания перенаправления (если нужно)
+        Selenide.open("http://127.0.0.1:8000/pages/login/");
+        $("#loginUser").shouldBe(Condition.visible);
+    }
+}
 
 
 

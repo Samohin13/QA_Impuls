@@ -6,7 +6,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class RegistrationPage {
-    private final SelenideElement emailField = $("[id = 'email']");
+    private static final SelenideElement emailField = $("[id = 'email']");
     private final SelenideElement firstName = $("[id ='firstName']");
     private final SelenideElement lastName = $("[id ='lastName']");
     public final SelenideElement birthday = $("[id='birthday']"); // Добавлено поле даты рождения
@@ -17,7 +17,7 @@ public class RegistrationPage {
     public SelenideElement registrationButton = $(byText("Регистрация"));
 
 
-    public void register(String email, String firstName, String lastName, int birthday, String clubName, String password) {
+ public  void register(String email, String firstName, String lastName, int birthday, String clubName, String password) {
         emailField.setValue(email);
         this.firstName.setValue(firstName);
         this.lastName.setValue(lastName);
@@ -29,6 +29,7 @@ public class RegistrationPage {
         registrationButton.click();
     }
 }
+
 
 
 
